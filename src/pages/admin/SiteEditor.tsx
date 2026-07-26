@@ -56,7 +56,7 @@ export default function SiteEditor() {
             {rows.filter(r => r.section === section).map(row => {
               const v = draft[row.key] ?? { en: '', es: '' };
               const dirty = (row.value_en ?? '') !== v.en || (row.value_es ?? '') !== v.es;
-              const Field = row.kind === 'longtext' ? 'textarea' : 'input';
+              const long = row.kind === 'longtext';
               return (
                 <div className="field-row" key={row.key}>
                   <div className="field-label">
@@ -64,12 +64,22 @@ export default function SiteEditor() {
                     {row.hint && <span className="hint">{row.hint}</span>}
                   </div>
                   <div className="field-inputs">
-                    <label>English</label>
-                    <Field value={v.en}
-                      onChange={(e: any) => setDraft({ ...draft, [row.key]: { ...v, en: e.target.value } })} />
-                    <label>Spanish</label>
-                    <Field value={v.es}
-                      onChange={(e: any) => setDraft({ ...draft, [row.key]: { ...v, es: e.target.value } })} />
+                    <label htmlFor={row.key + '-en'}>English</label>
+                    {long ? (
+                      <textarea id={row.key + '-en'} value={v.en}
+                        onChange={e => setDraft({ ...draft, [row.key]: { ...v, en: e.target.value } })} />
+                    ) : (
+                      <input id={row.key + '-en'} value={v.en}
+                        onChange={e => setDraft({ ...draft, [row.key]: { ...v, en: e.target.value } })} />
+                    )}
+                    <label htmlFor={row.key + '-es'}>Spanish</label>
+                    {long ? (
+                      <textarea id={row.key + '-es'} value={v.es}
+                        onChange={e => setDraft({ ...draft, [row.key]: { ...v, es: e.target.value } })} />
+                    ) : (
+                      <input id={row.key + '-es'} value={v.es}
+                        onChange={e => setDraft({ ...draft, [row.key]: { ...v, es: e.target.value } })} />
+                    )}
                     <div className="field-actions">
                       <button className="btn sm" disabled={!dirty || saving === row.key}
                         onClick={() => save(row)}>
