@@ -235,10 +235,13 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:1
   border-top:2px solid var(--g);border-radius:var(--r);padding:44px 24px}
 
 /* footer */
+/* footer */
 .foot{background:var(--sgq-black);color:#A5A093;padding:44px 0 0}
 .foot-in{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,40px);display:grid;
   grid-template-columns:1.2fr 1fr 1fr;gap:26px}
-.foot-brand{display:flex;flex-direction:column;line-height:1.05}
+.foot-brand{display:flex;flex-direction:column;align-items:flex-start;line-height:1.05}
+.foot-crest-wrap{display:block;width:clamp(96px,9vw,128px);margin-bottom:14px}
+.foot-crest{display:block;width:100%;height:auto}
 .foot-col{display:flex;flex-direction:column;gap:7px;font-size:14px}
 .foot-col a{color:#A5A093;text-decoration:none}
 .foot-col a:hover{color:var(--g-lt)}
