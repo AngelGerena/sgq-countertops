@@ -23,7 +23,7 @@ export default function BlogEditor() {
   const nav = useNavigate();
 
   useEffect(() => {
-    if (isNew) { setSaved(JSON.stringify(BLANK)); return; }
+    if (isNew || !id) { setP(BLANK); setSaved(JSON.stringify(BLANK)); return; }
     supabase.from('posts').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
       if (error) { setErr(error.message); return; }
       if (data) { setP(data as Post); setSaved(JSON.stringify(data)); }
