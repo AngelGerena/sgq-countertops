@@ -12,9 +12,11 @@ const BLANK: Partial<Post> = {
 
 export default function BlogEditor() {
   const { id } = useParams();
-  const isNew = id === 'new';
-  const [p, setP] = useState<Partial<Post>>(BLANK);
+  /* Treat a missing param and the literal 'new' the same, so the component
+     cannot be broken by how the route happens to be registered. */
   const isNew = !id || id === 'new';
+  const [p, setP] = useState<Partial<Post>>(BLANK);
+  const [saved, setSaved] = useState<string>('');
   const [lang, setLang] = useState<'en'|'es'>('en');
   const [tab, setTab] = useState<'write'|'preview'|'seo'>('write');
   const [busy, setBusy] = useState(false);
