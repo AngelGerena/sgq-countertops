@@ -34,7 +34,6 @@ export default function App() {
         <Route path="jobs" element={<Jobs />} />
         <Route path="customers" element={<Customers />} />
         <Route path="catalog" element={<Catalog />} />
-        <Route path="blog/new" element={<BlogEditor />} />
         <Route path="blog/:id" element={<BlogEditor />} />
         <Route path="blog" element={<Blog />} />
         <Route path="site" element={<SiteEditor />} />
