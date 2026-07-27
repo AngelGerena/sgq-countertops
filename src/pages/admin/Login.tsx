@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../lib/AuthProvider';
 
 export default function Login() {
@@ -24,8 +24,9 @@ export default function Login() {
   return (
     <div className="login-screen">
       <div className="login-card">
-        <div className="login-brand">Finesse OS</div>
-        <div className="login-sub">Santiago's Granite &amp; Quartz</div>
+        <div className="login-brand">Santiago's</div>
+        <div className="login-sub">Granite &amp; Quartz</div>
+
         <form onSubmit={submit}>
           {err && <div className="err">{err}</div>}
           <label htmlFor="li-email">Email</label>
@@ -38,6 +39,9 @@ export default function Login() {
             {busy ? 'Signing in' : 'Sign in'}
           </button>
         </form>
+
+        <Link className="back-link" to="/">Back to the website</Link>
+        <div className="login-by">Finesse OS</div>
       </div>
     </div>
   );
