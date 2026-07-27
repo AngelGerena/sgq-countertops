@@ -20,7 +20,7 @@ export default function Process() {
   return (
     <section className="band dark" id="process">
       <div className="band-in">
-        <h2>{t('process.title', 'How it goes', 'Cómo funciona')}</h2>
+        <h2>{t('process.title', 'From measure to install', 'De la medición a la instalación')}</h2>
         <p className="band-lede">
           {t('process.intro', 'Four steps, start to finish. Most kitchens run seven to ten days.',
                               'Cuatro pasos, de principio a fin. La mayoría de las cocinas toman de siete a diez días.')}
