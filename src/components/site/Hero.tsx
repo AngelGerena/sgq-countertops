@@ -23,7 +23,8 @@ export default function Hero() {
       </picture>
 
       <div className="hero-scrim" aria-hidden="true" />
-      <div className="hero-rule" aria-hidden="true" />
+      <div className="hero-vein" aria-hidden="true" />
+      <div className="hero-vein btm" aria-hidden="true" />
 
       <div className="hero-in">
         <div className="hero-row">
@@ -31,7 +32,7 @@ export default function Hero() {
             <span className="kicker">{t('hero.kicker', 'Central Florida', 'Centro de Florida')}</span>
             <span className="h-part">
               {t('hero.headline_a', 'Measured', 'Medido')}<br />
-              {t('hero.headline_b', 'twice.', 'dos veces.')}
+              <em>{t('hero.headline_b', 'twice.', 'dos veces.')}</em>
             </span>
           </div>
 
@@ -55,7 +56,7 @@ export default function Hero() {
             <span className="kicker">{t('hero.kicker_b', 'Since 2000', 'Desde el 2000')}</span>
             <span className="h-part">
               {t('hero.headline_c', 'Installed', 'Instalado')}<br />
-              {t('hero.headline_d', 'once.', 'una vez.')}
+              <em>{t('hero.headline_d', 'once.', 'una vez.')}</em>
             </span>
           </div>
         </div>
@@ -68,8 +69,8 @@ export default function Hero() {
 
         <p className="lede">
           {t('hero.subhead',
-            'Twenty-five years fabricating and installing stone across Central Florida.',
-            'Veinticinco años fabricando e instalando piedra en el Centro de Florida.')}
+            'Twenty-five years fabricating and installing granite, quartz and quartzite across Central Florida. One crew, start to finish.',
+            'Veinticinco años fabricando e instalando granito, cuarzo y cuarcita en el Centro de Florida. Un solo equipo, de principio a fin.')}
         </p>
 
         <div className="hero-cta">
@@ -79,6 +80,21 @@ export default function Hero() {
           <a className="btn ghost-light" href="#work">
             {t('hero.cta_secondary', 'See the work', 'Ver trabajos')}
           </a>
+        </div>
+
+        <div className="trust-strip">
+          <div className="trust-cell">
+            <span className="trust-n">25</span>
+            <span className="trust-l">{t('hero.trust_1', 'Years in stone', 'Años en piedra')}</span>
+          </div>
+          <div className="trust-cell">
+            <span className="trust-n">1</span>
+            <span className="trust-l">{t('hero.trust_2', 'Crew, start to finish', 'Equipo, inicio a fin')}</span>
+          </div>
+          <div className="trust-cell">
+            <span className="trust-n">$0</span>
+            <span className="trust-l">{t('hero.trust_3', 'Measure & estimate', 'Medición y estimado')}</span>
+          </div>
         </div>
       </div>
     </section>

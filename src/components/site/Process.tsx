@@ -16,18 +16,22 @@ export default function Process() {
       b: t('process.4.body', 'Installed by the same crew, cleaned up, and walked through with you before we leave.',
                              'Instalado por el mismo equipo, limpio, y revisado con usted antes de irnos.') }
   ];
-
   return (
     <section className="band dark" id="process">
       <div className="band-in">
-        <h2>{t('process.title', 'From measure to install', 'De la medición a la instalación')}</h2>
-        <p className="band-lede">
+        <span className="eyebrow reveal">{t('process.eyebrow', 'How it works', 'Cómo funciona')}</span>
+        <h2 className="reveal">{t('process.title', 'From measure to install', 'De la medición a la instalación')}</h2>
+        <p className="band-lede reveal">
           {t('process.intro', 'Four steps, start to finish. Most kitchens run seven to ten days.',
                               'Cuatro pasos, de principio a fin. La mayoría de las cocinas toman de siete a diez días.')}
         </p>
         <ol className="steps">
           {steps.map((s, i) => (
-            <li key={i}><span className="step-n">{i + 1}</span><h3>{s.t}</h3><p>{s.b}</p></li>
+            <li key={i} className="reveal">
+              <span className="step-n">{i + 1}</span>
+              <h3>{s.t}</h3>
+              <p>{s.b}</p>
+            </li>
           ))}
         </ol>
       </div>

@@ -12,9 +12,7 @@ const BLANK: Partial<Post> = {
 
 export default function BlogEditor() {
   const { id } = useParams();
-  /* Treat a missing param and the literal 'new' the same, so the component
-     cannot be broken by how the route happens to be registered. */
-  const isNew = !id || id === 'new';
+  const isNew = id === 'new';
   const [p, setP] = useState<Partial<Post>>(BLANK);
   const [saved, setSaved] = useState<string>('');
   const [lang, setLang] = useState<'en'|'es'>('en');
@@ -25,7 +23,7 @@ export default function BlogEditor() {
   const nav = useNavigate();
 
   useEffect(() => {
-    if (isNew || !id) { setP(BLANK); setSaved(JSON.stringify(BLANK)); return; }
+    if (isNew) { setSaved(JSON.stringify(BLANK)); return; }
     supabase.from('posts').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
       if (error) { setErr(error.message); return; }
       if (data) { setP(data as Post); setSaved(JSON.stringify(data)); }
