@@ -11,21 +11,6 @@ export default function Footer() {
     <footer className="foot">
       <div className="foot-in">
         <div className="foot-brand">
-          <picture className="foot-crest-wrap">
-            <source
-              type="image/webp"
-              srcSet="/images/crest-280.webp 280w, /images/crest-420.webp 420w"
-              sizes="120px"
-            />
-            <img
-              className="foot-crest"
-              src="/images/crest-280.png"
-              srcSet="/images/crest-280.png 280w, /images/crest-420.png 420w"
-              sizes="120px"
-              width="991" height="1249"
-              alt="Santiago's Granite and Quartz"
-            />
-          </picture>
           <span className="wm-name">Santiago's</span>
           <span className="wm-sub">Granite &amp; Quartz</span>
         </div>
