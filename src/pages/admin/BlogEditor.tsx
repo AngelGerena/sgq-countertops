@@ -12,7 +12,7 @@ const BLANK: Partial<Post> = {
 
 export default function BlogEditor() {
   const { id } = useParams();
-  const isNew = id === 'new';
+  const isNew = !id || id === 'new';
   const [p, setP] = useState<Partial<Post>>(BLANK);
   const [saved, setSaved] = useState<string>('');
   const [lang, setLang] = useState<'en'|'es'>('en');
