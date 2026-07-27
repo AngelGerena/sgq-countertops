@@ -14,7 +14,7 @@ export default function BlogEditor() {
   const { id } = useParams();
   const isNew = id === 'new';
   const [p, setP] = useState<Partial<Post>>(BLANK);
-  const [saved, setSaved] = useState<string>('');
+  const isNew = !id || id === 'new';
   const [lang, setLang] = useState<'en'|'es'>('en');
   const [tab, setTab] = useState<'write'|'preview'|'seo'>('write');
   const [busy, setBusy] = useState(false);
