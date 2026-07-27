@@ -80,3 +80,17 @@ export interface Job {
   is_demo: boolean; deleted_at: string | null;
   created_at: string; updated_at: string;
 }
+
+export interface Post {
+  id: string; slug: string; status: 'draft' | 'published';
+  title_en: string; title_es: string | null;
+  excerpt_en: string | null; excerpt_es: string | null;
+  body_en: string | null; body_es: string | null;
+  cover_path: string | null; cover_alt_en: string | null; cover_alt_es: string | null;
+  seo_title_en: string | null; seo_title_es: string | null;
+  meta_description_en: string | null; meta_description_es: string | null;
+  city: string | null; county: string | null; materials: string[]; job_id: string | null;
+  author: string | null; published_at: string | null;
+  is_demo: boolean; deleted_at: string | null;
+  created_at: string; updated_at: string;
+}

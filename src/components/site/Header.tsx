@@ -7,6 +7,7 @@ const LINKS = [
   { href: '#services', en: 'Services',    es: 'Servicios' },
   { href: '#choose',   en: 'Choose',      es: 'Elegir' },
   { href: '#process',  en: 'Process',     es: 'Proceso' },
+  { href: '/blog',     en: 'Blog',        es: 'Blog' },
   { href: '#quote',    en: 'Get a quote', es: 'Cotización' }
 ];
 
