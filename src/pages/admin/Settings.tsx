@@ -50,8 +50,8 @@ export default function Settings() {
       <section className="panel"><div className="panel-body">
         {FIELDS.map(f => (
           <div className="field" key={String(f.key)}>
-            <label>{f.label}</label>
-            <input type={f.type ?? 'text'}
+            <label htmlFor={'set-' + String(f.key)}>{f.label}</label>
+            <input id={'set-' + String(f.key)} type={f.type ?? 'text'}
               value={(s[f.key] as string | number | null) ?? ''}
               onChange={e => setS({ ...s, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value })} />
           </div>

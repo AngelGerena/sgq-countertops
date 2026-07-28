@@ -3,6 +3,7 @@ import { useAuth } from '../lib/AuthProvider';
 
 const NAV = [
   { to:'/admin',           label:'Dashboard', end:true  },
+  { to:'/admin/assistant', label:'Your assistant', end:false },
   { to:'/admin/leads',     label:'Requests',  end:false },
   { to:'/admin/quotes',    label:'Quotes',    end:false },
   { to:'/admin/jobs',      label:'Jobs',      end:false },

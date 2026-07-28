@@ -36,13 +36,21 @@ export default function Quotes() {
     logAction('updated', 'quotes', qt.id, `Quote ${qt.quote_number} marked ${status}`);
 
     if (status === 'accepted') {
-      const { data: num } = await supabase.rpc('next_doc_number', { p_kind: 'job' });
-      const { data: job, error: jErr } = await supabase.from('jobs').insert({
-        job_number: num, customer_id: qt.customer_id, quote_id: qt.id, status: 'sold',
-        contract_total: qt.total, balance_due: qt.total - qt.deposit_due
-      }).select('id, job_number').single();
-      if (jErr) { setErr(jErr.message); return; }
-      logAction('created', 'jobs', job.id, `Job ${job.job_number} created from quote ${qt.quote_number}`);
+      // Only create a job if one doesn't already exist for this quote.
+      // Prevents duplicates when a quote is toggled accepted more than once.
+      const { data: existing, error: exErr } = await supabase.from('jobs')
+        .select('id').eq('quote_id', qt.id).is('deleted_at', null).limit(1);
+      if (exErr) { setErr(exErr.message); return; }
+      if (!existing || existing.length === 0) {
+        const { data: num, error: numErr } = await supabase.rpc('next_doc_number', { p_kind: 'job' });
+        if (numErr) { setErr(numErr.message); return; }
+        const { data: job, error: jErr } = await supabase.from('jobs').insert({
+          job_number: num, customer_id: qt.customer_id, quote_id: qt.id, status: 'sold',
+          contract_total: qt.total, balance_due: qt.total - qt.deposit_due
+        }).select('id, job_number').single();
+        if (jErr) { setErr(jErr.message); return; }
+        logAction('created', 'jobs', job.id, `Job ${job.job_number} created from quote ${qt.quote_number}`);
+      }
     }
     if (filter !== 'all') load();
   }

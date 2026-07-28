@@ -4,6 +4,7 @@ import BlogIndex from './pages/BlogIndex';
 import BlogPost from './pages/BlogPost';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
+import Assistant from './pages/admin/Assistant';
 import Leads from './pages/admin/Leads';
 import Quotes from './pages/admin/Quotes';
 import QuoteBuilder from './pages/admin/QuoteBuilder';
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/admin/login" element={<Login />} />
       <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
         <Route index element={<Dashboard />} />
+        <Route path="assistant" element={<Assistant />} />
         <Route path="leads" element={<Leads />} />
         <Route path="quotes/new" element={<QuoteBuilder />} />
         <Route path="quotes" element={<Quotes />} />

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { logAction } from '../../lib/audit';
 import { slugify, Markdown } from '../../lib/markdown';
+import { generatePost } from '../../lib/ai';
 import type { Post } from '../../lib/types';
 
 const BLANK: Partial<Post> = {
@@ -21,6 +22,48 @@ export default function BlogEditor() {
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const nav = useNavigate();
+
+  // AI writer panel state
+  const [aiOpen, setAiOpen] = useState(isNew);
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiErr, setAiErr] = useState<string | null>(null);
+  const [facts, setFacts] = useState({ city: '', material: '', details: '' });
+
+  async function writeForMe() {
+    if (aiBusy) return;
+    if (!facts.city.trim() || !facts.material.trim()) {
+      setAiErr('Just two things needed: the town and what you installed.');
+      return;
+    }
+    setAiBusy(true); setAiErr(null); setErr(null);
+    try {
+      const g = await generatePost({
+        city: facts.city.trim(),
+        material: facts.material.trim(),
+        details: facts.details.trim() || undefined,
+      });
+      setP(prev => ({
+        ...prev,
+        title_en: g.title_en, title_es: g.title_es,
+        excerpt_en: g.excerpt_en, excerpt_es: g.excerpt_es,
+        body_en: g.body_en, body_es: g.body_es,
+        meta_description_en: g.meta_description_en, meta_description_es: g.meta_description_es,
+        cover_alt_en: g.cover_alt_en, cover_alt_es: g.cover_alt_es,
+        slug: prev.slug || slugify(g.slug || g.title_en),
+        city: g.city || facts.city.trim(),
+        county: g.county || prev.county || '',
+        materials: g.materials?.length ? g.materials : [facts.material.trim()],
+        status: 'draft',
+      }));
+      setAiOpen(false);
+      setTab('write');
+      setMsg('Your post is written! Read it over, tweak anything you like, then press Publish.');
+    } catch (e) {
+      setAiErr(e instanceof Error ? e.message : 'The writer hit a snag. Try again.');
+    } finally {
+      setAiBusy(false);
+    }
+  }
 
   useEffect(() => {
     if (isNew) { setSaved(JSON.stringify(BLANK)); return; }
@@ -81,6 +124,52 @@ export default function BlogEditor() {
 
       {err && <div className="notice err-notice">{err}</div>}
       {msg && <div className="notice">{msg}</div>}
+
+      {!aiOpen && (
+        <button className="btn ghost sm ai-reopen" onClick={() => { setAiOpen(true); setMsg(null); }}>
+          Let AI write it for you
+        </button>
+      )}
+
+      {aiOpen && (
+        <section className="panel ai-panel">
+          <div className="panel-head">
+            <h2>Let AI write it for you</h2>
+            <p className="muted small">Answer two quick questions about a real job and the writer does the rest —
+              the whole story, in English and Spanish, ready to publish. Nothing goes live until you press Publish.</p>
+          </div>
+          <div className="panel-body">
+            {aiErr && <div className="notice err-notice">{aiErr}</div>}
+            <label htmlFor="ai-city">Where was the job?</label>
+            <input id="ai-city" placeholder="DeBary" value={facts.city} disabled={aiBusy}
+              onChange={e => setFacts({ ...facts, city: e.target.value })} />
+
+            <label htmlFor="ai-material">What did you install?</label>
+            <input id="ai-material" placeholder="Calacatta Gold quartz kitchen countertops"
+              value={facts.material} disabled={aiBusy}
+              onChange={e => setFacts({ ...facts, material: e.target.value })} />
+
+            <label htmlFor="ai-details">Anything special about it? <span className="muted small">(optional)</span></label>
+            <textarea id="ai-details" rows={3} disabled={aiBusy}
+              placeholder="Old laminate counters, waterfall edge on the island, matching backsplash, done in two days…"
+              value={facts.details}
+              onChange={e => setFacts({ ...facts, details: e.target.value })} />
+
+            <div className="row-actions">
+              <button className="btn gold" onClick={writeForMe} disabled={aiBusy}>
+                {aiBusy ? 'Writing your post… about 30 seconds' : 'Write it for me'}
+              </button>
+              {!isNew || p.title_en ? (
+                <button className="btn ghost" onClick={() => setAiOpen(false)} disabled={aiBusy}>Close</button>
+              ) : (
+                <button className="btn ghost" onClick={() => setAiOpen(false)} disabled={aiBusy}>
+                  I&rsquo;ll write it myself
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="editor-bar">
         <div className="chips-row">

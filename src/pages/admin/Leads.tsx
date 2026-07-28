@@ -14,6 +14,7 @@ export default function Leads() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
+  const [converting, setConverting] = useState<string | null>(null);
   const nav = useNavigate();
 
   const load = useCallback(async () => {
@@ -49,13 +50,16 @@ export default function Leads() {
   }
 
   async function toCustomer(l: Lead) {
+    if (converting) return; // guard against double-clicks creating duplicate customers
+    setConverting(l.id);
     const { data, error } = await supabase.from('customers').insert({
       name: l.name, email: l.email, phone: l.phone, city: l.city,
       notes: l.message ? `From website request: ${l.message}` : null
     }).select('id').single();
-    if (error) { setErr(error.message); return; }
+    if (error) { setConverting(null); setErr(error.message); return; }
     await supabase.from('leads').update({ customer_id: data.id, status: 'contacted' }).eq('id', l.id);
     logAction('created', 'customers', data.id, `Created customer from lead ${l.name}`);
+    setConverting(null);
     nav('/admin/customers');
   }
 
@@ -118,7 +122,9 @@ export default function Leads() {
                       {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                     {!l.customer_id && (
-                      <button className="btn sm" onClick={() => toCustomer(l)}>Save as customer</button>
+                      <button className="btn sm" disabled={converting === l.id} onClick={() => toCustomer(l)}>
+                        {converting === l.id ? 'Saving\u2026' : 'Save as customer'}
+                      </button>
                     )}
                     <button className="btn ghost sm danger-text" onClick={() => softDelete(l)}>Remove</button>
                   </div>
