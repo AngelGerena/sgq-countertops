@@ -537,8 +537,9 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:1
   .wm-sub{font-size:8.5px;letter-spacing:.2em}
   .lang button{padding:6px 10px;font-size:12px}
 
-  .work-grid{grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
-  .work-tile.feature{grid-column:1/-1}
+  .work-grid{grid-template-columns:1fr;gap:12px;margin-top:28px}
+  .work-tile{grid-column:1/-1;aspect-ratio:4/3}
+  .work-tile.feature{aspect-ratio:16/10}
   .work-tile figcaption{font-size:11px;padding:9px 10px 8px}
   .work-tile figcaption .cap-town{font-size:9px}
 
@@ -853,6 +854,7 @@ img,picture,video,canvas{max-width:100%}
   .cab-gallery{gap:10px;margin-top:28px}
   .cab-tile figcaption{font-size:11px;padding:9px 10px 8px}
   .cab-swatches{grid-template-columns:repeat(3,1fr);gap:10px}
+  .cab-swatches.euro{grid-template-columns:repeat(3,1fr);justify-content:stretch}
   .cab-swatch figcaption{font-size:11px}
 }
 
