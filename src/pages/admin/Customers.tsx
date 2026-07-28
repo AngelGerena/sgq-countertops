@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
 import { logAction } from '../../lib/audit';
 import { shortDate } from '../../lib/money';
+import CustomerImport from '../../components/CustomerImport';
 import type { Customer } from '../../lib/types';
 
 const BLANK = { name:'', email:'', phone:'', address:'', city:'', zip:'', lang:'en', notes:'' };
@@ -13,6 +14,7 @@ export default function Customers() {
   const [err, setErr] = useState<string | null>(null);
   const [editing, setEditing] = useState<Partial<Customer> | null>(null);
   const [busy, setBusy] = useState(false);
+  const [importing, setImporting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -70,10 +72,17 @@ export default function Customers() {
       <div className="toolbar">
         <input className="search" placeholder="Search by name, phone or city"
           value={q} onChange={e => setQ(e.target.value)} aria-label="Search customers" />
-        <button className="btn accent" onClick={() => setEditing({ ...BLANK } as Partial<Customer>)}>
+        <button className="btn" onClick={() => { setImporting(true); setEditing(null); }}>
+          Import from phone
+        </button>
+        <button className="btn accent" onClick={() => { setEditing({ ...BLANK } as Partial<Customer>); setImporting(false); }}>
           Add customer
         </button>
       </div>
+
+      {importing && (
+        <CustomerImport existing={rows} onDone={load} onClose={() => setImporting(false)} />
+      )}
 
       {editing && (
         <section className="panel editor">
@@ -110,7 +119,7 @@ export default function Customers() {
         <div className="empty">
           <h2>{q ? 'Nobody matches that search' : 'No customers yet'}</h2>
           <p>{q ? 'Try a different name, phone or city.'
-                : 'Customers get added here when you save a website request, or you can add one directly.'}</p>
+                : 'Customers get added here when you save a website request — or bring in everyone at once with “Import from phone”.'}</p>
         </div>
       ) : (
         <ul className="rows">

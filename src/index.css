@@ -644,6 +644,26 @@ img,picture,video,canvas{max-width:100%}
   .qd-contact,.qd-for{text-align:left}
 }
 
+/* ---- contact import ---- */
+.import-panel .import-lede{font-size:15px;line-height:1.6;margin:0 0 14px;max-width:62ch}
+.import-help{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.import-help h3{font-family:var(--display);font-size:19px;margin:0 0 10px}
+.import-help-tabs{display:flex;gap:8px;margin-bottom:10px}
+.chip.on{background:var(--gold-soft);border-color:var(--gold);color:var(--text)}
+.import-steps{margin:0 0 12px;padding-left:20px;font-size:14.5px;line-height:1.75;max-width:64ch}
+.import-steps li{margin-bottom:6px}
+.import-bulk{display:flex;gap:8px;margin-bottom:10px}
+.import-table-wrap{max-height:380px;overflow:auto;border:1px solid var(--line);
+  border-radius:var(--r-sm);margin-bottom:14px}
+.import-table{width:100%;border-collapse:collapse;font-size:14px}
+.import-table th{position:sticky;top:0;background:var(--marble-card);text-align:left;
+  text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:var(--muted);
+  padding:9px 12px;border-bottom:1px solid var(--line)}
+.import-table td{padding:9px 12px;border-bottom:1px solid var(--line)}
+.import-table tr.off td{opacity:.42}
+.import-table input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold-deep)}
+.import-close{margin-top:14px}
+
 /* ---- print: just the document, on clean paper ---- */
 @media print{
   body{background:#fff}
