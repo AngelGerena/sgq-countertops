@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthProvider';
 
@@ -17,18 +18,39 @@ const NAV = [
 export default function AdminLayout() {
   const { admin, signOut } = useAuth();
   const nav = useNavigate();
+  const [open, setOpen] = useState(false);
   async function out() { await signOut(); nav('/admin/login', { replace: true }); }
 
   return (
     <div className="shell">
-      <aside className="side">
+      <aside className={'side' + (open ? ' open' : '')}>
         <div className="side-head">
-          <div className="side-name">Santiago's</div>
-          <div className="side-sub">Granite &amp; Quartz</div>
+          <div>
+            <div className="side-name">Santiago's</div>
+            <div className="side-sub">Granite &amp; Quartz</div>
+          </div>
+          <button
+            className="side-toggle"
+            aria-expanded={open}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen(v => !v)}
+          >
+            {open ? (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            )}
+            <span>Menu</span>
+          </button>
         </div>
         <nav className="side-nav">
           {NAV.map(n => (
             <NavLink key={n.to} to={n.to} end={n.end} id={'nav-' + n.to.split('/').pop()}
+              onClick={() => setOpen(false)}
               className={({ isActive }) => 'side-link' + (isActive ? ' on' : '')}>
               {n.label}
             </NavLink>
