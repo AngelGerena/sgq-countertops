@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { useContent } from '../../lib/SiteContentProvider';
 import { useSettings } from '../../lib/useSettings';
 
+/* Hash links resolve against the home page so they still work from
+   secondary pages like /cabinets and /blog. */
 const LINKS = [
-  { href: '#work',      en: 'Work',      es: 'Trabajos' },
-  { href: '#materials', en: 'Materials', es: 'Materiales' },
-  { href: '#services',  en: 'Services',  es: 'Servicios' },
-  { href: '#process',   en: 'Process',   es: 'Proceso' },
-  { href: '#faq',       en: 'FAQ',       es: 'Preguntas' },
-  { href: '#quote',     en: 'Estimate',  es: 'Estimado' }
+  { href: '/#work',      en: 'Work',      es: 'Trabajos' },
+  { href: '/#materials', en: 'Materials', es: 'Materiales' },
+  { href: '/cabinets',   en: 'Cabinets',  es: 'Gabinetes' },
+  { href: '/#services',  en: 'Services',  es: 'Servicios' },
+  { href: '/#process',   en: 'Process',   es: 'Proceso' },
+  { href: '/#faq',       en: 'FAQ',       es: 'Preguntas' },
+  { href: '/#quote',     en: 'Estimate',  es: 'Estimado' }
 ];
 
 export default function Header() {
@@ -19,7 +22,7 @@ export default function Header() {
   return (
     <header className="head">
       <div className="head-in">
-        <a className="wordmark" href="#top" onClick={() => setOpen(false)}>
+        <a className="wordmark" href="/#top" onClick={() => setOpen(false)}>
           <img className="wm-mark" src="/images/sgq-mark-64.png" alt="" width="64" height="64" />
           <span className="wm-stack">
             <span className="wm-name">Santiago's</span>

@@ -88,7 +88,15 @@ export default function Catalog() {
               const dirty = Object.keys(d).length > 0;
               return (
                 <tr key={m.id} className={m.is_active ? '' : 'off'}>
-                  <td>{m.name}{m.tier && <span className="meta"> · {m.tier}</span>}</td>
+                  <td>
+                    <span className="name-cell">
+                      {m.swatch_path && (
+                        <img className="swatch-thumb" src={m.swatch_path} alt=""
+                          loading="lazy" width="40" height="40" />
+                      )}
+                      <span>{m.name}{m.tier && <span className="meta"> · {m.tier}</span>}</span>
+                    </span>
+                  </td>
                   <td className="meta">{m.supplier ?? '—'}</td>
                   <td className="num">
                     <input className="num-in" type="number" step="0.01"
@@ -118,6 +126,29 @@ export default function Catalog() {
         </table>
       )}
       <p className="muted small">Your cost stays private. It never appears on a quote or on your website.</p>
+
+      {kind === 'cabinet' && (
+        <section className="spec-books">
+          <h2>Cabinet spec books</h2>
+          <p className="muted">
+            The full manufacturer catalogs — door styles, box construction, sizing charts.
+            These live here in the portal only. The public website never links to them and
+            never shows the supplier's name.
+          </p>
+          <div className="spec-grid">
+            <a className="spec-card" href="/specs/line-a-shaker-spec.pdf" target="_blank" rel="noreferrer">
+              <span className="spec-title">Classic Shaker line</span>
+              <span className="meta">All-wood framed cabinets · door styles &amp; colors · PDF</span>
+              <span className="spec-open">Open spec book</span>
+            </a>
+            <a className="spec-card" href="/specs/line-b-frameless-spec.pdf" target="_blank" rel="noreferrer">
+              <span className="spec-title">European Frameless line</span>
+              <span className="meta">Modern slab-door cabinets · finishes &amp; sizing · PDF</span>
+              <span className="spec-open">Open spec book</span>
+            </a>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

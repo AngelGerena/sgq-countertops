@@ -21,8 +21,21 @@ Before the first deploy, add these under Site settings, Environment variables:
 
 ## Database
 
-Migrations 01 (foundation), 02 (sales and jobs), 03 (AI writer log) and 04 (agent layer) are applied in the Supabase SQL Editor.
+Migrations 01 (foundation), 02 (sales and jobs), 03 (AI writer log), 04 (agent layer) and
+05 (cabinet catalog seed) are applied in the Supabase SQL Editor.
 Admin access is granted by inserting into `admin_users` after a user accepts their invite.
+
+## Cabinet catalog
+
+Migration `05_cabinet_catalog.sql` seeds 14 cabinet colors across two house lines
+(Classic Shaker and European Frameless) with swatch images in `public/images/catalog/`.
+Entries seed with price 0 and inactive, so nothing shows on a quote until real per-linear-foot
+pricing is set in Portal > What you sell > Cabinets and the entry is switched on.
+
+The public `/cabinets` page presents both lines as SGQ's own collections. The supplier's
+name appears only inside the admin portal, and the manufacturer spec PDFs live in
+`public/specs/` — linked only from the admin Catalog page, with `/specs/` disallowed in
+`robots.txt`. Never link those PDFs or name the supplier anywhere public.
 
 ## AI blog writer
 
