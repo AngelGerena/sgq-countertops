@@ -41,7 +41,15 @@ export default function Materials() {
         <div className="mat-grid">
           {mats.map(m => (
             <article className={'mat-card reveal'} key={m.k}>
-              <div className={'mat-swatch sw-' + m.k} aria-hidden="true" />
+              <div className={'mat-swatch sw-' + m.k}>
+                <img
+                  src={'/images/materials/mat-' + m.k + '.webp'}
+                  alt={m.name}
+                  loading="lazy"
+                  width={900}
+                  height={520}
+                />
+              </div>
               <div className="mat-body">
                 <h3>{m.name}</h3>
                 <p>{m.body}</p>
