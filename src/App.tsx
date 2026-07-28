@@ -8,6 +8,7 @@ import Assistant from './pages/admin/Assistant';
 import Leads from './pages/admin/Leads';
 import Quotes from './pages/admin/Quotes';
 import QuoteBuilder from './pages/admin/QuoteBuilder';
+import QuoteView from './pages/admin/QuoteView';
 import Jobs from './pages/admin/Jobs';
 import Customers from './pages/admin/Customers';
 import Catalog from './pages/admin/Catalog';
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="assistant" element={<Assistant />} />
         <Route path="leads" element={<Leads />} />
         <Route path="quotes/new" element={<QuoteBuilder />} />
+        <Route path="quotes/:id" element={<QuoteView />} />
         <Route path="quotes" element={<Quotes />} />
         <Route path="jobs" element={<Jobs />} />
         <Route path="customers" element={<Customers />} />

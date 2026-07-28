@@ -88,12 +88,15 @@ export default function Quotes() {
             <li key={q.id} className="row-card">
               <div className="row-main">
                 <div className="row-who">
-                  <strong>{q.quote_number ?? 'Draft'}</strong>
+                  <Link className="row-link" to={`/admin/quotes/${q.id}`}>
+                    <strong>{q.quote_number ?? 'Draft'}</strong>
+                  </Link>
                   <span className="meta">
                     {q.customer_id ? custs[q.customer_id] ?? 'Customer removed' : 'No customer linked'}
                     {' · '}{shortDate(q.created_at)}
                   </span>
                 </div>
+                <Link className="btn small no-print" to={`/admin/quotes/${q.id}`}>Open</Link>
                 <span className="amount">{money(q.total)}</span>
                 <label className="sr-only" htmlFor={'qs-'+q.id}>Status</label>
                 <select id={'qs-'+q.id} value={q.status}
