@@ -36,8 +36,9 @@ export default function Assistant() {
             generated_at: todays.created_at,
           });
         }
-      } catch (e) {
-        setErr(e instanceof Error ? e.message : 'Could not load the assistant.');
+      } catch {
+        // Never show raw database errors to the owner.
+        setErr('The assistant could not be reached just now. Try again in a minute — and if it keeps happening, ask Angel.');
         setAgent(null);
       }
     })();
@@ -68,7 +69,7 @@ export default function Assistant() {
       {err && <div className="notice err-notice">{err}</div>}
 
       {agent === null && !err && (
-        <div className="notice">The assistant is not set up yet — ask Angel to run the latest update.</div>
+        <div className="notice">Your assistant is almost ready — one last piece of setup is waiting on Angel&rsquo;s side. Nothing for you to do.</div>
       )}
 
       <section className="panel ai-panel">

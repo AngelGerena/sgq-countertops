@@ -64,6 +64,12 @@ export async function getDailyBrief(): Promise<DailyBrief> {
   return data.result as DailyBrief;
 }
 
+/** Migration 04 not run yet: PostgREST reports the table as missing from its schema cache. */
+function tableMissing(error: { code?: string; message?: string }): boolean {
+  return error.code === 'PGRST205' || error.code === '42P01' ||
+    /schema cache|does not exist/i.test(error.message ?? '');
+}
+
 /** The activity log — everything the staff did, in plain English. */
 export async function listRecentRuns(limit = 14): Promise<AgentRunRow[]> {
   const { data, error } = await supabase
@@ -71,17 +77,23 @@ export async function listRecentRuns(limit = 14): Promise<AgentRunRow[]> {
     .select('id, decision, narrative, detail, created_at')
     .order('created_at', { ascending: false })
     .limit(limit);
-  if (error) throw new Error(error.message);
+  if (error) {
+    if (tableMissing(error)) return []; // not set up yet — quiet, not scary
+    throw new Error(error.message);
+  }
   return (data ?? []) as AgentRunRow[];
 }
 
-/** The staff roster (Sprint 1: just the Office Manager). */
+/** The staff roster (Sprint 1: just the Office Manager). Null = not set up yet. */
 export async function getOfficeManager(): Promise<AgentRow | null> {
   const { data, error } = await supabase
     .from('agents')
     .select('id, role, display_en, display_es, autonomy, enabled')
     .eq('role', 'office_manager')
     .maybeSingle();
-  if (error) throw new Error(error.message);
+  if (error) {
+    if (tableMissing(error)) return null; // not set up yet — the page shows friendly guidance
+    throw new Error(error.message);
+  }
   return (data as AgentRow) ?? null;
 }
