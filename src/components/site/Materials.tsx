@@ -14,7 +14,8 @@ export default function Materials() {
       body: t('materials.granite.body',
         'Natural stone, no two slabs alike. Takes heat straight from the oven and shrugs off knives. The workhorse of Florida kitchens.',
         'Piedra natural, no hay dos losas iguales. Resiste el calor directo del horno y los cuchillos. El caballo de batalla de las cocinas de Florida.'),
-      tag: t('materials.granite.tag', 'Natural stone', 'Piedra natural')
+      tag: t('materials.granite.tag', 'Natural stone', 'Piedra natural'),
+      cta: t('materials.granite.cta', 'Is granite right for you?', '¿Le conviene el granito?')
     },
     {
       k: 'quartz',
@@ -22,7 +23,8 @@ export default function Materials() {
       body: t('materials.quartz.body',
         'Engineered for consistency — the veining you pick in the showroom is the veining you get. Non-porous, so it never needs sealing.',
         'Diseñado para la consistencia: el veteado que elige en la sala de exhibición es el que recibe. No poroso, nunca necesita sellado.'),
-      tag: t('materials.quartz.tag', 'Low maintenance', 'Bajo mantenimiento')
+      tag: t('materials.quartz.tag', 'Low maintenance', 'Bajo mantenimiento'),
+      cta: t('materials.quartz.cta', 'See 8 quartz installs', 'Ver 8 instalaciones en cuarzo')
     },
     {
       k: 'quartzite',
@@ -30,7 +32,8 @@ export default function Materials() {
       body: t('materials.quartzite.body',
         'The look of marble with the hardness of granite. For the kitchen that has to stop people at the doorway.',
         'La apariencia del mármol con la dureza del granito. Para la cocina que debe detener a la gente en la puerta.'),
-      tag: t('materials.quartzite.tag', 'Statement stone', 'Piedra de lujo')
+      tag: t('materials.quartzite.tag', 'Statement stone', 'Piedra de lujo'),
+      cta: t('materials.quartzite.cta', 'Why quartzite costs more', 'Por qué la cuarcita cuesta más')
     }
   ];
   const slabs = mats.map(m => ({
@@ -47,8 +50,8 @@ export default function Materials() {
         <h2 className="reveal">{t('materials.title', 'Choose your material', 'Elija su material')}</h2>
         <p className="band-lede reveal">
           {t('materials.intro',
-            'Cesar walks every client through the slabs in person. Here is where the conversation starts.',
-            'Cesar acompaña a cada cliente a ver las losas en persona. Aquí es donde empieza la conversación.')}
+            'Three materials, and the honest differences between them. Cesar walks every client through the slabs in person — this is where the conversation starts.',
+            'Tres materiales y las diferencias reales entre ellos. Cesar acompaña a cada cliente a ver las losas en persona: aquí empieza la conversación.')}
         </p>
         <div className="mat-grid">
           {mats.map((m, i) => (
@@ -74,7 +77,7 @@ export default function Materials() {
                 <p>{m.body}</p>
                 <span className="mat-tag">{m.tag}</span>
                 <a className="mat-more" href={'/stone#' + m.k}>
-                  {t('materials.more', 'Compare and see it installed', 'Comparar y verlo instalado')}
+                  {m.cta}
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
                 </a>
               </div>
@@ -83,8 +86,8 @@ export default function Materials() {
         </div>
         <p className="mat-cta reveal">
           <a className="btn btn-ghost" href="/stone">
-            {t('materials.guide', 'Read the full guide to choosing stone',
-               'Lea la guía completa para elegir su piedra')}
+            {t('materials.guide', 'Compare all three side by side',
+               'Compare las tres lado a lado')}
           </a>
         </p>
       </div>

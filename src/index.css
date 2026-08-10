@@ -533,6 +533,25 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:1
 .mat-more:hover{gap:11px;color:var(--g-lt)}
 .mat-cta{margin-top:34px;text-align:center}
 
+/* photo strip on the stone page — supporting evidence, not the headline */
+.shot-label{display:block;margin:30px 0 12px;font-size:10.5px;font-weight:700;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--g);opacity:.9}
+.stone-shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.stone-shots .cab-tile.feature{grid-column:span 2}
+.stone-shots.single{grid-template-columns:minmax(0,660px)}
+.stone-shots.single .cab-tile{aspect-ratio:16/10}
+
+/* the four buyer scenarios under the table */
+.stone-picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));
+  gap:14px;margin-top:26px}
+.pick{padding:18px 20px;border:1px solid var(--sgq-slate);border-radius:var(--radius);
+  background:rgb(255 255 255 / .02)}
+.pick-k{display:block;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--g);margin-bottom:9px}
+.pick p{font-size:14.5px;line-height:1.6;margin:0}
+
+.stone-table td.hl{color:var(--g-lt);font-weight:600}
+
 .stone-facts{list-style:none;margin:26px 0 0;padding:0;display:grid;
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .stone-facts li{font-size:14.5px;line-height:1.6;padding:15px 17px;
@@ -554,6 +573,9 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:1
 .stone-note{margin-top:20px;font-size:14.5px;line-height:1.7;max-width:640px;opacity:.85}
 
 @media(max-width:640px){
+  .stone-shots{grid-template-columns:1fr}
+  .stone-shots .cab-tile.feature{grid-column:span 1}
+  .stone-picks{grid-template-columns:1fr;gap:11px}
   .stone-facts{grid-template-columns:1fr;gap:11px}
   .stone-table{font-size:13.5px;min-width:480px}
   .stone-table th,.stone-table td{padding:11px 13px}
