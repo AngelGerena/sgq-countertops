@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Cabinets from './pages/Cabinets';
+import Stone from './pages/Stone';
 import BlogIndex from './pages/BlogIndex';
 import BlogPost from './pages/BlogPost';
 import Login from './pages/admin/Login';
@@ -25,6 +26,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/cabinets" element={<Cabinets />} />
+      <Route path="/stone" element={<Stone />} />
       <Route path="/blog" element={<BlogIndex />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
 

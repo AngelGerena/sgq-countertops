@@ -1,4 +1,7 @@
 import { useContent } from '../../lib/SiteContentProvider';
+import { useLightbox } from '../../lib/useLightbox';
+import Lightbox from './Lightbox';
+import ZoomPip from './ZoomPip';
 
 /* All ten tiles are real photos from Cesar's installs — countertops,
    full-height backsplashes and cabinet jobs. No placeholder material
@@ -26,10 +29,10 @@ const TILES: {
   {
     key: 'tile3', feature: true,
     src: '/images/work/job-calacatta-island.webp',
-    alt: 'Calacatta-look quartz island over a deep green shaker base with farmhouse sink',
+    alt: 'Calacatta-look quartz island on a dark base, with a stainless farmhouse sink and full-height slab backsplash',
     town: ['Kitchen remodel', 'Remodelación de cocina'],
-    cap: ['Calacatta quartz · farmhouse sink · island seating',
-          'Cuarzo Calacatta · fregadero campestre · isla con asientos'],
+    cap: ['Calacatta quartz · farmhouse sink · full-height slab backsplash',
+          'Cuarzo Calacatta · fregadero campestre · salpicadero de losa completa'],
   },
   {
     key: 'tile4',
@@ -90,7 +93,18 @@ const TILES: {
 ];
 
 export default function Work() {
-  const { t } = useContent();
+  const { t, lang } = useContent();
+  const lb = useLightbox();
+  const es = lang === 'es';
+
+  /* the viewer walks this grid in the order it is displayed */
+  const shots = TILES.map(tile => ({
+    src: tile.src,
+    alt: tile.alt,
+    caption: t(`work.${tile.key}.cap`, tile.cap[0], tile.cap[1]),
+    sub: t(`work.${tile.key}.town`, tile.town[0], tile.town[1])
+  }));
+
   return (
     <section className="band" id="work">
       <div className="band-in">
@@ -102,9 +116,16 @@ export default function Work() {
             'Encimeras, gabinetes y cocinas completas en los condados de Volusia, Seminole y Orange. Cada una medida, fabricada e instalada por Cesar y su equipo.')}
         </p>
         <div className="work-grid">
-          {TILES.map(tile => (
+          {TILES.map((tile, i) => (
             <figure key={tile.key} className={'work-tile reveal' + (tile.feature ? ' feature' : '')}>
               <img src={tile.src} alt={tile.alt} loading="lazy" decoding="async" />
+              <button
+                className="tile-zoom"
+                onClick={() => lb.openAt(shots, i)}
+                aria-label={(es ? 'Ampliar: ' : 'Enlarge: ') + tile.alt}
+              >
+                <ZoomPip />
+              </button>
               <figcaption>
                 <span className="cap-town">{t(`work.${tile.key}.town`, tile.town[0], tile.town[1])}</span>
                 {t(`work.${tile.key}.cap`, tile.cap[0], tile.cap[1])}
@@ -113,6 +134,10 @@ export default function Work() {
           ))}
         </div>
       </div>
+      <Lightbox
+        items={lb.items} index={lb.index} open={lb.open}
+        onClose={lb.close} onNext={lb.next} onPrev={lb.prev}
+      />
     </section>
   );
 }

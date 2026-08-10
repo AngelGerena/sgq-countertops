@@ -3,6 +3,9 @@ import { useContent } from '../lib/SiteContentProvider';
 import { useReveal } from '../lib/useReveal';
 import Header from '../components/site/Header';
 import Footer from '../components/site/Footer';
+import Lightbox from '../components/site/Lightbox';
+import ZoomPip from '../components/site/ZoomPip';
+import { useLightbox } from '../lib/useLightbox';
 
 /* The cabinet lines are presented as SGQ's own house collections.
    Supplier names live in the admin portal only — never on this page. */
@@ -56,7 +59,32 @@ const EURO_SHOTS: Shot[] = [
 export default function Cabinets() {
   const { lang, t } = useContent();
   useReveal();
+  const lb = useLightbox();
   const L = (en: string, es: string) => (lang === 'es' ? es : en);
+  const zoomLabel = lang === 'es' ? 'Ampliar: ' : 'Enlarge: ';
+
+  /* four separate sets, so the arrows stay inside the row you clicked */
+  const shot = (list: Shot[], collection: string) =>
+    list.map(x => ({
+      src: `/images/catalog/cabinets-${x.slug}.webp`,
+      alt: L(x.en, x.es),
+      caption: L(x.en, x.es),
+      sub: collection
+    }));
+  const swatch = (list: Color[], collection: string) =>
+    list.map(c => ({
+      src: `/images/catalog/swatch-${c.slug}.webp`,
+      alt: L(c.en, c.es),
+      caption: L(c.en, c.es),
+      sub: collection
+    }));
+
+  const shakerName = t('cabinets.shaker.title', 'Classic Shaker Collection', 'Colección Shaker Clásica');
+  const euroName = t('cabinets.euro.title', 'European Frameless Collection', 'Colección Europea Sin Marco');
+  const shakerShots = shot(SHAKER_SHOTS, shakerName);
+  const euroShots = shot(EURO_SHOTS, euroName);
+  const shakerSwatches = swatch(SHAKER_COLORS, shakerName);
+  const euroSwatches = swatch(EURO_COLORS, euroName);
 
   return (
     <div className="site">
@@ -86,9 +114,13 @@ export default function Cabinets() {
           </p>
 
           <div className="cab-gallery">
-            {SHAKER_SHOTS.map(s => (
+            {SHAKER_SHOTS.map((s, i) => (
               <figure className={'cab-tile reveal' + (s.feature ? ' feature' : '')} key={s.slug}>
                 <img src={`/images/catalog/cabinets-${s.slug}.webp`} alt={L(s.en, s.es)} loading="lazy" />
+                <button className="tile-zoom" onClick={() => lb.openAt(shakerShots, i)}
+                  aria-label={zoomLabel + L(s.en, s.es)}>
+                  <ZoomPip />
+                </button>
                 <figcaption>{L(s.en, s.es)}</figcaption>
               </figure>
             ))}
@@ -96,9 +128,13 @@ export default function Cabinets() {
 
           <h3 className="cab-colors-h reveal">{t('cabinets.shaker.colors', 'Available finishes', 'Acabados disponibles')}</h3>
           <div className="cab-swatches">
-            {SHAKER_COLORS.map(c => (
+            {SHAKER_COLORS.map((c, i) => (
               <figure className="cab-swatch reveal" key={c.slug}>
-                <img src={`/images/catalog/swatch-${c.slug}.webp`} alt={L(c.en, c.es)} loading="lazy" />
+                <button className="zoomable" onClick={() => lb.openAt(shakerSwatches, i)}
+                  aria-label={zoomLabel + L(c.en, c.es)}>
+                  <img src={`/images/catalog/swatch-${c.slug}.webp`} alt={L(c.en, c.es)} loading="lazy" />
+                  <ZoomPip />
+                </button>
                 <figcaption>{L(c.en, c.es)}</figcaption>
               </figure>
             ))}
@@ -118,9 +154,13 @@ export default function Cabinets() {
           </p>
 
           <div className="cab-gallery">
-            {EURO_SHOTS.map(s => (
+            {EURO_SHOTS.map((s, i) => (
               <figure className={'cab-tile reveal' + (s.feature ? ' feature' : '')} key={s.slug}>
                 <img src={`/images/catalog/cabinets-${s.slug}.webp`} alt={L(s.en, s.es)} loading="lazy" />
+                <button className="tile-zoom" onClick={() => lb.openAt(euroShots, i)}
+                  aria-label={zoomLabel + L(s.en, s.es)}>
+                  <ZoomPip />
+                </button>
                 <figcaption>{L(s.en, s.es)}</figcaption>
               </figure>
             ))}
@@ -128,9 +168,13 @@ export default function Cabinets() {
 
           <h3 className="cab-colors-h reveal">{t('cabinets.euro.colors', 'Available finishes', 'Acabados disponibles')}</h3>
           <div className="cab-swatches euro">
-            {EURO_COLORS.map(c => (
+            {EURO_COLORS.map((c, i) => (
               <figure className="cab-swatch reveal" key={c.slug}>
-                <img src={`/images/catalog/swatch-${c.slug}.webp`} alt={L(c.en, c.es)} loading="lazy" />
+                <button className="zoomable" onClick={() => lb.openAt(euroSwatches, i)}
+                  aria-label={zoomLabel + L(c.en, c.es)}>
+                  <img src={`/images/catalog/swatch-${c.slug}.webp`} alt={L(c.en, c.es)} loading="lazy" />
+                  <ZoomPip />
+                </button>
                 <figcaption>{L(c.en, c.es)}</figcaption>
               </figure>
             ))}
@@ -154,6 +198,10 @@ export default function Cabinets() {
       </section>
 
       <Footer />
+      <Lightbox
+        items={lb.items} index={lb.index} open={lb.open}
+        onClose={lb.close} onNext={lb.next} onPrev={lb.prev}
+      />
     </div>
   );
 }

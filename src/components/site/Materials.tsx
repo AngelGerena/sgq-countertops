@@ -1,7 +1,12 @@
 import { useContent } from '../../lib/SiteContentProvider';
+import { useLightbox } from '../../lib/useLightbox';
+import Lightbox from './Lightbox';
+import ZoomPip from './ZoomPip';
 
 export default function Materials() {
-  const { t } = useContent();
+  const { t, lang } = useContent();
+  const lb = useLightbox();
+  const es = lang === 'es';
   const mats = [
     {
       k: 'granite',
@@ -28,6 +33,13 @@ export default function Materials() {
       tag: t('materials.quartzite.tag', 'Statement stone', 'Piedra de lujo')
     }
   ];
+  const slabs = mats.map(m => ({
+    src: '/images/materials/mat-' + m.k + '.webp',
+    alt: m.name,
+    caption: m.body,
+    sub: m.name
+  }));
+
   return (
     <section className="band dark" id="materials">
       <div className="band-in">
@@ -39,7 +51,7 @@ export default function Materials() {
             'Cesar acompaña a cada cliente a ver las losas en persona. Aquí es donde empieza la conversación.')}
         </p>
         <div className="mat-grid">
-          {mats.map(m => (
+          {mats.map((m, i) => (
             <article className={'mat-card reveal'} key={m.k}>
               <div className={'mat-swatch sw-' + m.k}>
                 <img
@@ -49,16 +61,37 @@ export default function Materials() {
                   width={900}
                   height={520}
                 />
+                <button
+                  className="tile-zoom"
+                  onClick={() => lb.openAt(slabs, i)}
+                  aria-label={(es ? 'Ampliar: ' : 'Enlarge: ') + m.name}
+                >
+                  <ZoomPip />
+                </button>
               </div>
               <div className="mat-body">
                 <h3>{m.name}</h3>
                 <p>{m.body}</p>
                 <span className="mat-tag">{m.tag}</span>
+                <a className="mat-more" href={'/stone#' + m.k}>
+                  {t('materials.more', 'Compare and see it installed', 'Comparar y verlo instalado')}
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+                </a>
               </div>
             </article>
           ))}
         </div>
+        <p className="mat-cta reveal">
+          <a className="btn btn-ghost" href="/stone">
+            {t('materials.guide', 'Read the full guide to choosing stone',
+               'Lea la guía completa para elegir su piedra')}
+          </a>
+        </p>
       </div>
+      <Lightbox
+        items={lb.items} index={lb.index} open={lb.open}
+        onClose={lb.close} onNext={lb.next} onPrev={lb.prev}
+      />
     </section>
   );
 }

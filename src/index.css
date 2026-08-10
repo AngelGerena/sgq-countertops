@@ -522,14 +522,164 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:1
 .post-body img{border-radius:var(--radius);margin:18px 0}
 
 /* ============================================================
+   STONE PAGE
+   ============================================================ */
+.mat-more{
+  display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+  font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--g);
+  text-decoration:none;transition:gap var(--dur) var(--ease),color var(--dur) var(--ease)}
+.mat-more svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.mat-more:hover{gap:11px;color:var(--g-lt)}
+.mat-cta{margin-top:34px;text-align:center}
+
+.stone-facts{list-style:none;margin:26px 0 0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.stone-facts li{font-size:14.5px;line-height:1.6;padding:15px 17px;
+  border:1px solid var(--line);border-left:3px solid var(--g);border-radius:var(--radius)}
+.stone-facts strong{display:block;font-size:10.5px;font-weight:700;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--g);margin-bottom:6px}
+.band.dark .stone-facts li{border-color:var(--sgq-slate);border-left-color:var(--g)}
+
+.stone-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:26px;
+  border:1px solid var(--line);border-radius:var(--radius)}
+.band.dark .stone-table-wrap{border-color:var(--sgq-slate)}
+.stone-table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+.stone-table th{text-align:left;padding:14px 16px;font-size:11px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--g);
+  border-bottom:1px solid var(--sgq-slate);white-space:nowrap}
+.stone-table td{padding:13px 16px;border-bottom:1px solid rgb(255 255 255 / .07)}
+.stone-table tbody tr:last-child td{border-bottom:0}
+.stone-table td:first-child{font-weight:600;white-space:nowrap}
+.stone-note{margin-top:20px;font-size:14.5px;line-height:1.7;max-width:640px;opacity:.85}
+
+@media(max-width:640px){
+  .stone-facts{grid-template-columns:1fr;gap:11px}
+  .stone-table{font-size:13.5px;min-width:480px}
+  .stone-table th,.stone-table td{padding:11px 13px}
+}
+
+/* ============================================================
+   LIGHTBOX — full-bleed image viewer for the galleries
+   ============================================================ */
+/* Two ways in. .tile-zoom is a transparent button stretched over a tile whose
+   image is absolutely positioned — nothing about the existing layout moves.
+   .zoomable wraps an image that sits in normal flow. */
+.tile-zoom{position:absolute;inset:0;z-index:3;border:0;padding:0;background:transparent;
+  cursor:zoom-in;-webkit-tap-highlight-color:transparent}
+.tile-zoom::after{content:"";position:absolute;inset:0;background:rgb(12 13 14 / 0);
+  transition:background var(--dur) var(--ease)}
+.tile-zoom:hover::after{background:rgb(12 13 14 / .14)}
+.tile-zoom:focus-visible{outline:2px solid var(--g);outline-offset:-3px}
+
+.zoomable{cursor:zoom-in;border:0;padding:0;background:none;display:block;width:100%;
+  font:inherit;color:inherit;text-align:inherit;position:relative;
+  -webkit-tap-highlight-color:transparent}
+.zoomable::after{content:"";position:absolute;inset:0;background:rgb(12 13 14 / 0);
+  transition:background var(--dur) var(--ease);pointer-events:none;z-index:1}
+.zoomable:hover::after{background:rgb(12 13 14 / .16)}
+.zoom-pip{position:absolute;top:10px;right:10px;z-index:2;width:30px;height:30px;
+  border-radius:50%;display:grid;place-items:center;
+  background:rgb(12 13 14 / .58);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  opacity:0;transform:scale(.9);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.zoomable:hover .zoom-pip,.zoomable:focus-visible .zoom-pip,
+.tile-zoom:hover .zoom-pip,.tile-zoom:focus-visible .zoom-pip,
+.work-tile:hover .zoom-pip,.cab-tile:hover .zoom-pip,.mat-card:hover .zoom-pip{opacity:1;transform:none}
+.zoom-pip svg{width:15px;height:15px;fill:none;stroke:var(--g-lt);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.lb{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  height:100vh;height:100dvh;
+  gap:clamp(6px,2vw,22px);padding:clamp(14px,3vw,40px);
+  padding-top:max(clamp(14px,3vw,40px),env(safe-area-inset-top));
+  padding-bottom:max(clamp(14px,3vw,40px),env(safe-area-inset-bottom));
+  background:rgb(6 7 7 / .93);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  animation:lbIn var(--dur) var(--ease)}
+@keyframes lbIn{from{opacity:0}to{opacity:1}}
+
+.lb-stage{display:flex;flex-direction:column;align-items:center;gap:14px;
+  max-width:min(1180px,100%);max-height:100%;margin:0;min-width:0}
+.lb-img{max-width:100%;max-height:calc(100dvh - 190px);width:auto;height:auto;
+  object-fit:contain;border-radius:var(--radius);display:block;
+  box-shadow:0 30px 90px rgb(0 0 0 / .6);animation:lbPop var(--dur) var(--ease)}
+@keyframes lbPop{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+
+.lb-cap{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;
+  max-width:620px;padding:0 8px}
+.lb-sub{font-size:10.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--g)}
+.lb-text{font-size:14.5px;color:#D8D3C8;line-height:1.5}
+.lb-count{font-size:12px;letter-spacing:.1em;color:#8A867E;font-variant-numeric:tabular-nums}
+
+.lb-x,.lb-arrow{background:rgb(255 255 255 / .07);border:1px solid rgb(255 255 255 / .16);
+  border-radius:50%;cursor:pointer;display:grid;place-items:center;flex:0 0 auto;
+  min-width:46px;min-height:46px;
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease),
+             transform var(--dur-fast) var(--ease)}
+.lb-x:hover,.lb-arrow:hover{background:rgb(201 162 39 / .2);border-color:var(--g)}
+.lb-x:active,.lb-arrow:active{transform:scale(.94)}
+.lb-x svg,.lb-arrow svg{width:21px;height:21px;fill:none;stroke:var(--snow);
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lb-x{position:absolute;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:2}
+
+.lb-pre{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+
+@media(hover:none){
+  .zoom-pip{opacity:.85;transform:none}
+
+  /* On touch there is no pointer to leave, so :hover latches on after a tap
+     and stays until something else is tapped. That left a dark scrim and a
+     lifted tile sitting there. Neutralise every hover state on these grids —
+     desktop is untouched because it matches hover:hover instead. */
+  .tile-zoom:hover::after,.zoomable:hover::after{background:rgb(12 13 14 / 0)}
+  .work-tile:hover,.cab-tile:hover,.mat-card:hover{transform:none}
+  .work-tile:hover img,.cab-tile:hover img,.mat-card:hover .mat-swatch img{transform:none}
+  .cab-swatch:hover img{transform:none}
+
+  /* give the tap somewhere to land instead */
+  .tile-zoom:active::after,.zoomable:active::after{background:rgb(12 13 14 / .2)}
+  .work-tile:active,.cab-tile:active,.mat-card:active{transform:scale(.985)}
+  .cab-swatch:active img{transform:scale(.98)}
+}
+
+@media(max-width:760px){
+  /* Stack it and let flex do the sizing. The old version subtracted a fixed
+     230px for the caption and arrow row, which overflowed in landscape and on
+     short viewports. Now the image simply takes whatever is left over.
+     Padding keeps the safe-area insets the desktop rule established — a flat
+     padding here would have clipped the viewer under the notch. */
+  .lb{flex-direction:column;gap:0;
+    padding:12px;
+    padding-top:max(64px,calc(env(safe-area-inset-top) + 58px));
+    padding-bottom:max(84px,calc(env(safe-area-inset-bottom) + 74px));
+    padding-left:max(12px,env(safe-area-inset-left));
+    padding-right:max(12px,env(safe-area-inset-right))}
+  .lb-stage{flex:1 1 auto;min-height:0;width:100%;gap:10px;padding-bottom:0}
+  .lb-img{flex:1 1 auto;min-height:0;max-height:100%;max-width:100%}
+  .lb-cap{flex:0 0 auto}
+  .lb-arrow{position:absolute;bottom:max(16px,calc(env(safe-area-inset-bottom) + 8px));z-index:2;
+    min-width:52px;min-height:52px}
+  .lb-arrow.prev{left:max(16px,env(safe-area-inset-left))}
+  .lb-arrow.next{right:max(16px,env(safe-area-inset-right))}
+  .lb-text{font-size:13.5px}
+}
+
+/* Short viewports — landscape phones. Drop the caption text so the picture
+   keeps the room, but hold on to the counter. */
+@media(max-height:520px){
+  .lb{padding-top:max(52px,calc(env(safe-area-inset-top) + 46px));
+    padding-bottom:max(64px,calc(env(safe-area-inset-bottom) + 56px))}
+  .lb-text,.lb-sub{display:none}
+  .lb-stage{gap:6px}
+}
+
+/* ============================================================
    MOBILE PASSES
    ============================================================ */
 @media(max-width:860px){
   .burger{display:flex}
-     /* .nav goes absolute below this width, so its margin-left:auto no longer
+  /* .nav goes absolute below this width, so its margin-left:auto no longer
      pushes anything. Move the auto margin onto the action group instead. */
   .head-act{margin-left:auto}
-
   .nav{position:absolute;top:100%;left:0;right:0;background:rgb(12 13 14 / .97);
     -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
     flex-direction:column;gap:0;padding:8px 22px calc(18px + env(safe-area-inset-bottom));display:none;
@@ -850,6 +1000,7 @@ img,picture,video,canvas{max-width:100%}
 .cab-swatch img{width:100%;aspect-ratio:3/5;object-fit:cover;border-radius:var(--radius-sm);
   border:1px solid var(--edge);box-shadow:var(--shadow-sm);display:block;
   transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+.cab-swatch img{transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .cab-swatch:hover img{transform:translateY(-3px);box-shadow:var(--shadow-md)}
 .cab-swatch figcaption{margin-top:8px;font-size:12.5px;font-weight:600;color:var(--dim)}
 .band.dark .cab-swatch img{border-color:var(--sgq-slate)}
