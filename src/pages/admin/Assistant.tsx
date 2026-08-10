@@ -32,6 +32,7 @@ export default function Assistant() {
               new_requests: 0, waiting_requests: 0, stale_quotes: 0,
               installs_soon: 0, jobs_owed: 0, blog_drafts: 0,
             },
+            composed_by: todays.detail.composed_by,
             run_id: todays.id,
             generated_at: todays.created_at,
           });
@@ -100,6 +101,13 @@ export default function Assistant() {
           {brief && (
             <>
               <p className="brief-text">{briefText}</p>
+
+              {brief.composed_by && brief.composed_by !== 'ai' && (
+                <p className="brief-degraded">
+                  Written in plain summary mode today. Everything below is accurate —
+                  it just is not in the assistant&rsquo;s usual voice. Worth mentioning to Angel.
+                </p>
+              )}
 
               {brief.asks.length > 0 && (
                 <div className="brief-asks">

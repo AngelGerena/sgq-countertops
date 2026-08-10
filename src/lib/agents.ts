@@ -23,6 +23,8 @@ export interface DailyBrief {
   };
   run_id: string | null;
   generated_at: string;
+  /** 'ai' when the model wrote it, otherwise the reason it fell back. */
+  composed_by?: string;
 }
 
 export interface AgentRunRow {

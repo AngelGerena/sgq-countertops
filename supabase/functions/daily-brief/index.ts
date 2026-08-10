@@ -143,6 +143,10 @@ Deno.serve(async (req) => {
     let brief: { brief_en: string; brief_es: string; asks: { text_en: string; text_es: string; link: string }[] };
     let tokensIn: number | null = null;
     let tokensOut: number | null = null;
+    // 'ai' when the model wrote it; anything else names the reason it did not,
+    // so a quietly-degraded assistant is visible in the run log instead of
+    // looking like a normal day.
+    let composedBy = 'ai';
 
     if (key) {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -153,14 +157,16 @@ Deno.serve(async (req) => {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
-          max_tokens: 1500,
+          model: 'claude-sonnet-5',
+          max_tokens: 2500,
           system: SYSTEM_PROMPT,
           messages: [{ role: 'user', content: 'Here is today\'s data:\n' + JSON.stringify(facts) }],
         }),
       });
       if (!res.ok) {
-        console.error('anthropic error', res.status, await res.text());
+        const body = await res.text();
+        console.error('anthropic error', res.status, body);
+        composedBy = `fallback:http_${res.status}`;
         brief = mechanicalBrief(facts);
       } else {
         const data = await res.json();
@@ -170,12 +176,17 @@ Deno.serve(async (req) => {
           .filter((b: { type: string }) => b.type === 'text')
           .map((b: { text: string }) => b.text).join('\n');
         const parsed = safeJson(text);
-        brief = (parsed && parsed.brief_en)
-          ? parsed as typeof brief
-          : mechanicalBrief(facts);
+        if (parsed && parsed.brief_en) {
+          brief = parsed as typeof brief;
+        } else {
+          console.error('brief JSON unparseable, first 400 chars:', text.slice(0, 400));
+          composedBy = 'fallback:unparseable';
+          brief = mechanicalBrief(facts);
+        }
       }
     } else {
       // No key yet — the assistant still works, just plainer.
+      composedBy = 'fallback:no_key';
       brief = mechanicalBrief(facts);
     }
 
@@ -184,7 +195,7 @@ Deno.serve(async (req) => {
       agent_id: agent.id,
       decision: 'acted',
       narrative: brief.brief_en,
-      detail: { ...brief, stats: summarize(facts), via: isCron ? 'schedule' : 'portal' },
+      detail: { ...brief, stats: summarize(facts), via: isCron ? 'schedule' : 'portal', composed_by: composedBy },
       tokens_in: tokensIn,
       tokens_out: tokensOut,
     }).select('id, created_at').single();
@@ -199,7 +210,7 @@ Deno.serve(async (req) => {
     // ---- Delivery: the morning email (cron runs only, optional) -------------
     if (isCron) await maybeEmail(db, brief);
 
-    return json({ result: { ...brief, stats: summarize(facts), run_id: run?.id ?? null, generated_at: run?.created_at ?? new Date().toISOString() } });
+    return json({ result: { ...brief, stats: summarize(facts), composed_by: composedBy, run_id: run?.id ?? null, generated_at: run?.created_at ?? new Date().toISOString() } });
   } catch (e) {
     console.error(e);
     return json({ error: 'Something went wrong preparing the brief.' }, 500);
