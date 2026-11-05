@@ -21,8 +21,18 @@ Before the first deploy, add these under Site settings, Environment variables:
 
 ## Database
 
+> **The Supabase project was deleted on 2026-11-05 (client non-payment).**
+> To stand it back up, follow **`supabase/RESTORE.md`**. Takes about 20 minutes.
+>
+> Do not try to rebuild from `supabase/migrations/` — migrations 01 and 02 were
+> never committed, so that folder cannot produce a working database on its own.
+> **`supabase/RESTORE.sql` is the source of truth**: captured from the live
+> database and tested against a real Postgres cluster.
+
 Migrations 01 (foundation), 02 (sales and jobs), 03 (AI writer log), 04 (agent layer) and
-05 (cabinet catalog seed) are applied in the Supabase SQL Editor.
+05 (cabinet catalog seed) were applied by hand in the Supabase SQL Editor. Only 03, 04
+and 05 are in this repo; 01 and 02 exist only as part of `RESTORE.sql`.
+
 Admin access is granted by inserting into `admin_users` after a user accepts their invite.
 
 ## Cabinet catalog
